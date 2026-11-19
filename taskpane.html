@@ -148,7 +148,6 @@ header .tb{flex-wrap:wrap}
  .grid>*{grid-column:span 6!important}.grid>.s2,.grid>.s3{grid-column:span 3!important}
  .split{grid-template-columns:1fr}
  #pvBody{zoom:.5}#pv .scroll{padding:10px}
- table.dt{display:block;overflow-x:auto}
 }
 /* ===== Màn hình khóa / kích hoạt ===== */
 #gate{position:fixed;inset:0;background:linear-gradient(160deg,#12263a,#0f5c8c);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;overflow:auto}
@@ -163,6 +162,23 @@ header .tb{flex-wrap:wrap}
 #gate .foot{font-size:11px;color:var(--muted);margin-top:14px;text-align:center}
 #lic{position:fixed;inset:0;background:rgba(16,24,40,.6);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
 #lic.on{display:flex}#lic .box{background:#fff;border-radius:12px;padding:18px;max-width:460px;width:100%}
+/* ===== Bảng co giãn ===== */
+.tblwrap{overflow-x:auto;overflow-y:visible;padding-bottom:6px;scrollbar-width:auto;scrollbar-color:#9aa4b2 #eef1f5}
+.tblwrap::-webkit-scrollbar{height:14px}.tblwrap::-webkit-scrollbar-track{background:#eef1f5;border-radius:7px}.tblwrap::-webkit-scrollbar-thumb{background:#9aa4b2;border-radius:7px;border:3px solid #eef1f5}.tblwrap::-webkit-scrollbar-thumb:hover{background:#667085}
+table.rzt{table-layout:fixed;max-width:none}
+table.rzt th{position:relative;white-space:normal;vertical-align:bottom}
+table.rzt td{overflow:hidden}
+table.rzt input,table.rzt select,table.rzt textarea{width:100%;min-width:0}
+table.rzt textarea.ta{resize:vertical;min-height:34px;line-height:1.4;overflow:hidden}
+.rzh{position:absolute;top:0;right:-5px;bottom:0;width:10px;cursor:col-resize;z-index:3;touch-action:none}
+.rzh::after{content:'';position:absolute;top:20%;bottom:20%;left:4px;width:2px;background:#cfd4dc;border-radius:1px}
+.rzh:hover::after,.rzh.on::after{background:var(--acc);top:0;bottom:0}
+.help button.ghost{padding:2px 8px;font-size:12px;margin-left:6px}
+.kvl{grid-template-columns:auto 1fr}.kvl div:nth-child(even){text-align:left}
+#gate input{font:inherit;border:1px solid #cfd4dc;border-radius:7px;padding:8px 10px;width:100%}
+#gate a{color:var(--acc)}
+#lic input{font:inherit;border:1px solid #cfd4dc;border-radius:7px;padding:7px 9px;width:100%}
+#lic .box{max-height:90vh;overflow:auto}
 
 </style>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
@@ -270,7 +286,7 @@ var GKC = (function () {
     var bits = await sub.deriveBits({ name: 'ECDH', public: devKey }, dhPriv, 256);
     var kek = await hkdf(bits, may, 'GK-wrap-v1', ['encrypt']);
     var w = await aesEnc(kek, ub64u(sec.K), 'GK1|' + may);
-    var pl = { v: 1, id: b32(rand(5)), ten: String(o.ten || '').trim(), gc: String(o.ghiChu || '').trim(), may: may, cap: o.cap || new Date().toISOString().slice(0, 10), han: o.han || '', kcv: sec.kcv, wi: b64u(w.iv), wc: b64u(w.ct) };
+    var pl = { v: 1, id: b32(rand(5)), ten: String(o.ten || '').trim(), gc: String(o.ghiChu || '').trim(), sdt: String(o.sdt || '').replace(/[^\d+]/g, ''), may: may, cap: o.cap || new Date().toISOString().slice(0, 10), han: o.han || '', kcv: sec.kcv, wi: b64u(w.iv), wc: b64u(w.ct) };
     var body = b64u(te.encode(JSON.stringify(pl)));
     var sk = await sub.importKey('jwk', sec.sigPriv, ECDSA, false, ['sign']);
     var sig = u8(await sub.sign(SIG, sk, te.encode(body)));
@@ -339,7 +355,35 @@ var GKC = (function () {
     <h2>📑 Hồ sơ Giao khoán Nhân công</h2>
     <p id="gOwner">Phần mềm có bản quyền – cần mã kích hoạt do chủ sở hữu cấp riêng cho máy này.</p>
     <div id="gBusy" style="padding:20px 0;text-align:center;color:var(--muted)">Đang kiểm tra bản quyền…</div>
+
+    <!-- Đăng nhập -->
+    <form id="gLogin" hidden autocomplete="on" onsubmit="return false">
+      <div class="lbl">Tên đăng nhập (số điện thoại)</div>
+      <input id="lUser" autocomplete="username">
+      <div class="lbl">Mật khẩu</div>
+      <input id="lPass" type="password" autocomplete="current-password">
+      <div class="row" style="margin-top:12px"><button class="pri" id="lGo" type="submit">🔓 Đăng nhập</button><a href="#" id="lForgot" class="right" style="font-size:13px">Quên mật khẩu?</a></div>
+      <div class="err" id="lErr" hidden></div>
+      <div class="foot">Máy đã được kích hoạt · Mã máy <b id="lFp"></b></div>
+    </form>
+
+    <!-- Tạo tài khoản sau khi kích hoạt -->
+    <form id="gSetup" hidden autocomplete="on" onsubmit="return false">
+      <div class="ok" id="sHello" style="font-weight:600;margin-bottom:6px"></div>
+      <p style="margin-top:0">Tạo tài khoản đăng nhập cho máy này. Lần sau mở phần mềm chỉ cần nhập tên đăng nhập và mật khẩu.</p>
+      <div class="lbl">Tên đăng nhập (nên dùng số điện thoại)</div>
+      <input id="sUser" autocomplete="username" placeholder="VD: 0987471500">
+      <div class="lbl">Mật khẩu (ít nhất 6 ký tự)</div>
+      <input id="sPass" type="password" autocomplete="new-password">
+      <div class="lbl">Nhập lại mật khẩu</div>
+      <input id="sPass2" type="password" autocomplete="new-password">
+      <div class="row" style="margin-top:12px"><button class="pri" id="sGo" type="submit">✔ Lưu & vào phần mềm</button></div>
+      <div class="err" id="sErr" hidden></div>
+    </form>
+
+    <!-- Kích hoạt -->
     <div id="gForm" hidden>
+      <div class="ok" id="gResetNote" hidden style="margin-bottom:8px">Quên mật khẩu: dán lại mã kích hoạt của máy này (hoặc xin chủ sở hữu mã mới) để đặt mật khẩu mới. <a href="#" id="gBack">Quay lại đăng nhập</a></div>
       <div class="step"><b class="n">1</b><div style="flex:1">
         <div class="lbl" style="margin-top:0">Mã máy của bạn</div>
         <div class="fp" id="gFp">…</div>
@@ -384,18 +428,43 @@ setTimeout(function(){if(!window.GKC){var b=document.getElementById('gBusy');if(
 <div class="toast" id="toast"></div>
 <iframe id="printFrame" style="position:absolute;width:0;height:0;border:0" title="print"></iframe>
 
-<div id="lic"><div class="box"><h2 style="margin:0 0 10px">🔒 Giấy phép sử dụng</h2><div class="kv" id="licKV"></div><div class="row" style="margin-top:16px"><button class="del" id="licOff">Gỡ kích hoạt trên máy này</button><button class="pri right" id="licClose">Đóng</button></div></div></div>
+<div id="lic"><div class="box"><h2 style="margin:0 0 10px">🔒 Tài khoản & giấy phép</h2><div class="kv kvl" id="licKV"></div>
+ <details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600;color:var(--acc)">Đổi tên đăng nhập / mật khẩu</summary>
+  <div class="lbl" style="font-size:12px;color:var(--muted);margin-top:8px">Mật khẩu hiện tại</div><input id="cOld" type="password" autocomplete="current-password">
+  <div class="lbl" style="font-size:12px;color:var(--muted);margin-top:8px">Tên đăng nhập mới (để nguyên nếu không đổi)</div><input id="cUser" autocomplete="username">
+  <div class="lbl" style="font-size:12px;color:var(--muted);margin-top:8px">Mật khẩu mới (để trống nếu không đổi)</div><input id="cNew" type="password" autocomplete="new-password">
+  <div class="lbl" style="font-size:12px;color:var(--muted);margin-top:8px">Nhập lại mật khẩu mới</div><input id="cNew2" type="password" autocomplete="new-password">
+  <div class="row" style="margin-top:10px"><button class="pri" id="cGo">Lưu thay đổi</button><span id="cMsg" style="font-size:13px"></span></div>
+ </details>
+ <div class="row" style="margin-top:16px"><button id="licOut">↩ Đăng xuất</button><button class="del" id="licOff">Gỡ kích hoạt trên máy này</button><button class="pri right" id="licClose">Đóng</button></div></div></div>
 </template>
 <script>
 (function(){
 'use strict';
-var CFG=window.GK_CONFIG,ENC=window.GK_CORE_ENC,dev=null,FP='',LIC=null,DK=null,inExcel=false;
+var CFG=window.GK_CONFIG,ENC=window.GK_CORE_ENC,dev=null,FP='',LIC=null,DK=null,inExcel=false,CODE=null,PENDING=null;
 var $=function(s){return document.querySelector(s)};
-function showErr(m){var e=$('#gErr');e.textContent='⛔ '+m;e.hidden=false}
-function fatal(m){$('#gBusy').innerHTML='<div class="err">⛔ '+m+'</div>'}
+var te=new TextEncoder(),td=new TextDecoder(),sub=crypto.subtle,ITER=210000;
+function show(id){['#gBusy','#gLogin','#gSetup','#gForm'].forEach(function(x){$(x).hidden=x!==id})}
+function err(id,m){var e=$(id);e.textContent='⛔ '+m;e.hidden=!m}
+function fatal(m){show('#gBusy');$('#gBusy').innerHTML='<div class="err">⛔ '+m+'</div>'}
 function fmtD(s){return s?s.split('-').reverse().join('/'):'Không thời hạn'}
+function normU(u){return String(u||'').trim().toLowerCase().replace(/[\s.\-]/g,'')}
 function officeReady(){return new Promise(function(res){if(!window.Office||!Office.onReady)return res(false);var t=setTimeout(function(){res(false)},4000);
   Office.onReady(function(info){clearTimeout(t);res(!!(info&&info.host===Office.HostType.Excel))})})}
+
+/* ---- Tài khoản: mã kích hoạt được mã hóa bằng khóa sinh từ mật khẩu (PBKDF2-SHA256) ---- */
+async function passKey(pass,salt,iter){var b=await sub.importKey('raw',te.encode(pass),'PBKDF2',false,['deriveKey']);return sub.deriveKey({name:'PBKDF2',salt:salt,iterations:iter,hash:'SHA-256'},b,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function accSave(user,pass,code){var salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),u=normU(user);
+ var ct=new Uint8Array(await sub.encrypt({name:'AES-GCM',iv:iv,additionalData:te.encode('GKACC|'+u)},await passKey(pass,salt,ITER),te.encode(code)));
+ localStorage.setItem('gk_acc',JSON.stringify({v:1,user:String(user).trim(),s:GKC.b64u(salt),i:ITER,iv:GKC.b64u(iv),ct:GKC.b64u(ct)}));localStorage.removeItem('gk_license')}
+function accGet(){try{return JSON.parse(localStorage.getItem('gk_acc')||'null')}catch(e){return null}}
+async function accOpen(user,pass){var a=accGet();if(!a)throw new Error('Chưa có tài khoản');
+ try{var pt=await sub.decrypt({name:'AES-GCM',iv:GKC.ub64u(a.iv),additionalData:te.encode('GKACC|'+normU(user))},await passKey(pass,GKC.ub64u(a.s),a.i),GKC.ub64u(a.ct));return td.decode(pt)}
+ catch(e){var x=new Error('Sai tên đăng nhập hoặc mật khẩu.');x.gk=true;throw x}}
+function checkPass(p,p2){if(String(p).length<6)return 'Mật khẩu phải có ít nhất 6 ký tự.';if(p!==p2)return 'Hai lần nhập mật khẩu không khớp.';return ''}
+/* chống dò mật khẩu: sau 5 lần sai phải chờ */
+function lockLeft(){var l=JSON.parse(localStorage.getItem('gk_lock')||'{"n":0,"t":0}');return l.t>Date.now()?Math.ceil((l.t-Date.now())/1000):0}
+function failOnce(){var l=JSON.parse(localStorage.getItem('gk_lock')||'{"n":0,"t":0}');l.n++;if(l.n>=5){l.t=Date.now()+Math.min(600,30*Math.pow(2,l.n-5))*1000}localStorage.setItem('gk_lock',JSON.stringify(l))}
 
 /* ---- Lưu trữ dữ liệu hồ sơ: mã hóa, nằm trong chính file Excel (document settings) ---- */
 var SKEY='gk_hoso_enc';
@@ -409,42 +478,57 @@ var HOST={
   try{localStorage.setItem(HOST.inExcel?SKEY+'_saoluu':SKEY,enc)}catch(e){}
   if(!HOST.inExcel)return;
   return new Promise(function(res,rej){var s=Office.context.document.settings;s.set(SKEY,enc);s.saveAsync(function(r){r.status===Office.AsyncResultStatus.Succeeded?res():rej(new Error(r.error&&r.error.message||'Lỗi lưu'))})})})},
+ /* thư viện dùng chung trên máy (danh bạ tổ trưởng…) – mã hóa, không phụ thuộc file Excel */
+ libLoad:function(name){var raw=localStorage.getItem('gk_lib_'+name);return raw?GKC.decData(DK,raw):Promise.resolve(null)},
+ libSave:function(name,text){return GKC.encData(DK,text).then(function(e){localStorage.setItem('gk_lib_'+name,e)})},
  encryptExport:function(text){return GKC.encData(DK,text).then(function(e){return 'Ho so Giao khoan - du lieu ma hoa\n'+e+'\n'})},
- decryptImport:function(text){var t=String(text).trim();if(t.charAt(0)==='{')return Promise.resolve(t);var m=/GKDATA1\.[\s\S]+/.exec(t);if(!m)return Promise.reject(new Error('File không phải dữ liệu dự án.'));return GKC.decData(DK,m[0])},
- showLicense:function(){var kv=[['Người được cấp',LIC.ten||'—'],['Ghi chú',LIC.gc||'—'],['Mã máy',FP],['Số giấy phép',LIC.id],['Ngày cấp',fmtD(LIC.cap)],['Hạn dùng',fmtD(LIC.han)],['Nơi lưu dữ liệu',HOST.inExcel?'Mã hóa trong file Excel đang mở':'Mã hóa trong trình duyệt']];
-  $('#licKV').innerHTML=kv.map(function(x){return '<div>'+x[0]+'</div><div>'+String(x[1]).replace(/</g,'&lt;')+'</div>'}).join('');$('#lic').classList.add('on')}
+ decryptImport:function(text){var t=String(text).trim();if(t.charAt(0)==='{'||t.charAt(0)==='[')return Promise.resolve(t);var m=/GKDATA1\.[\s\S]+/.exec(t);if(!m)return Promise.reject(new Error('File không đúng định dạng.'));return GKC.decData(DK,m[0])},
+ showLicense:function(){var a=accGet()||{};var kv=[['Tên đăng nhập',a.user||'—'],['Người được cấp',LIC.ten||'—'],['Ghi chú',LIC.gc||'—'],['Mã máy',FP],['Số giấy phép',LIC.id],['Ngày cấp',fmtD(LIC.cap)],['Hạn dùng',fmtD(LIC.han)],['Nơi lưu dữ liệu',HOST.inExcel?'Mã hóa trong file Excel đang mở':'Mã hóa trong trình duyệt']];
+  $('#licKV').innerHTML=kv.map(function(x){return '<div>'+x[0]+'</div><div>'+String(x[1]).replace(/</g,'&lt;')+'</div>'}).join('');$('#cUser').value=a.user||'';$('#cMsg').textContent='';$('#lic').classList.add('on')}
 };
 
-async function unlock(code){
- var r=await GKC.verify(code,CFG,dev);
+async function mount(r){
  var js=await GKC.decryptCore(r.K,ENC);
  DK=await GKC.dataKey(r.K);r.K.fill(0);
- localStorage.setItem('gk_license',String(code).replace(/\s+/g,''));
- LIC=r.lic;HOST.inExcel=inExcel;
+ LIC=r.lic;HOST.inExcel=inExcel;localStorage.removeItem('gk_lock');
  $('#gate').remove();
  document.body.insertAdjacentHTML('afterbegin',$('#appTpl').innerHTML);
  $('#licClose').onclick=function(){$('#lic').classList.remove('on')};
- $('#licOff').onclick=function(){if(!confirm('Gỡ kích hoạt? Lần mở sau sẽ phải nhập lại mã kích hoạt.'))return;localStorage.removeItem('gk_license');location.reload()};
+ $('#licOut').onclick=function(){location.reload()};
+ $('#licOff').onclick=function(){if(!confirm('Gỡ kích hoạt? Tài khoản đăng nhập trên máy này sẽ bị xóa, lần sau phải nhập lại mã kích hoạt.'))return;localStorage.removeItem('gk_acc');localStorage.removeItem('gk_license');location.reload()};
+ $('#cGo').onclick=async function(){var m=$('#cMsg');m.style.color='var(--err)';try{var a=accGet(),code=await accOpen(a.user,$('#cOld').value),nu=$('#cUser').value.trim()||a.user,np=$('#cNew').value,p=np||$('#cOld').value;
+   if(np){var e=checkPass(np,$('#cNew2').value);if(e)throw new Error(e)}if(!nu)throw new Error('Tên đăng nhập không được để trống.');
+   await accSave(nu,p,code);['#cOld','#cNew','#cNew2'].forEach(function(x){$(x).value=''});HOST.showLicense();m.style.color='var(--ok)';m.textContent='✓ Đã lưu. Lần sau đăng nhập bằng '+nu}catch(e){m.textContent='⛔ '+e.message}};
  if(LIC.han)setInterval(function(){if(Date.now()>GKC.endOfDay(LIC.han)){alert('Giấy phép đã hết hạn.');location.reload()}},3600000);
  (new Function('HOST',js))(HOST);
 }
+function toSetup(code,r){PENDING={code:code,r:r};$('#sHello').textContent='✓ Kích hoạt thành công'+(r.lic.ten?' – '+r.lic.ten:'');$('#sUser').value=r.lic.sdt||(accGet()||{}).user||'';show('#gSetup');setTimeout(function(){($('#sUser').value?$('#sPass'):$('#sUser')).focus()},50)}
 
 async function boot(){
- if(CFG&&CFG.chuSoHuu)$('#gOwner').textContent='Bản quyền thuộc '+CFG.chuSoHuu+'. Cần mã kích hoạt do chủ sở hữu cấp riêng cho máy này.'+(CFG.lienHe?' Liên hệ: '+CFG.lienHe:'');
+ if(CFG&&CFG.chuSoHuu)$('#gOwner').textContent='Bản quyền thuộc '+CFG.chuSoHuu+'.'+(CFG.lienHe?' Liên hệ: '+CFG.lienHe:'');
  if(!window.crypto||!crypto.subtle)return fatal('Môi trường Excel này không hỗ trợ mã hóa (WebCrypto). Hãy cập nhật Office/Windows.');
  if(!CFG||!ENC)return fatal('Thiếu file config.js hoặc core.enc.js trong thư mục phát hành.');
  if(ENC.kcv!==CFG.kcv)return fatal('config.js và core.enc.js không cùng một bộ khóa – hãy chép lại đủ 2 file từ cùng một lần đóng gói.');
  inExcel=await officeReady();
  try{dev=await GKC.deviceKey()}catch(e){return fatal('Không tạo được khóa máy: '+e.message)}
  FP=await GKC.fingerprint(dev.pub);
- $('#gFp').textContent=FP;$('#gReq').value=GKC.encodeRequest(dev.pub);
- var saved=localStorage.getItem('gk_license');
- if(saved){try{await unlock(saved);return}catch(e){$('#gCode').value=saved.match(/.{1,64}/g).join('\n');showErr(e.message)}}
- $('#gBusy').hidden=true;$('#gForm').hidden=false;
+ $('#gFp').textContent=FP;$('#lFp').textContent=FP;$('#gReq').value=GKC.encodeRequest(dev.pub);
+ var acc=accGet(),legacy=localStorage.getItem('gk_license');
+ if(acc){$('#lUser').value=acc.user||'';show('#gLogin');setTimeout(function(){$('#lPass').focus()},50);return}
+ if(legacy){try{var r=await GKC.verify(legacy,CFG,dev);toSetup(legacy,r);return}catch(e){$('#gCode').value=legacy.match(/.{1,64}/g).join('\n');err('#gErr',e.message)}}
+ show('#gForm');
 }
-document.addEventListener('click',function(ev){var t=ev.target;
+document.addEventListener('click',async function(ev){var t=ev.target;
  if(t.id==='gCopy'){var a=$('#gReq');a.select();var done=function(){$('#gCopied').textContent='✓ Đã chép'};if(navigator.clipboard)navigator.clipboard.writeText(a.value).then(done,function(){document.execCommand('copy');done()});else{document.execCommand('copy');done()}}
- if(t.id==='gGo'){$('#gErr').hidden=true;t.disabled=true;t.textContent='Đang kiểm tra…';unlock($('#gCode').value).catch(function(e){showErr(e.gk?e.message:'Lỗi: '+e.message);t.disabled=false;t.textContent='🔓 Kích hoạt'})}
+ if(t.id==='gGo'){err('#gErr','');t.disabled=true;t.textContent='Đang kiểm tra…';var code=$('#gCode').value.replace(/\s+/g,'');
+  try{var r=await GKC.verify(code,CFG,dev);toSetup(code,r)}catch(e){err('#gErr',e.gk?e.message:'Lỗi: '+e.message)}t.disabled=false;t.textContent='🔓 Kích hoạt'}
+ if(t.id==='sGo'){err('#sErr','');var u=$('#sUser').value.trim(),p=$('#sPass').value,m=checkPass(p,$('#sPass2').value);if(!u)m='Nhập tên đăng nhập.';if(m)return err('#sErr',m);
+  t.disabled=true;try{await accSave(u,p,PENDING.code);await mount(PENDING.r)}catch(e){err('#sErr',e.message);t.disabled=false}}
+ if(t.id==='lGo'){err('#lErr','');var w=lockLeft();if(w)return err('#lErr','Nhập sai nhiều lần – thử lại sau '+w+' giây.');t.disabled=true;t.textContent='Đang kiểm tra…';
+  try{var code2=await accOpen($('#lUser').value,$('#lPass').value);var r2=await GKC.verify(code2,CFG,dev);await mount(r2)}
+  catch(e){if(/Sai tên/.test(e.message))failOnce();err('#lErr',e.message);t.disabled=false;t.textContent='🔓 Đăng nhập';$('#lPass').select()}}
+ if(t.id==='lForgot'){ev.preventDefault();$('#gResetNote').hidden=false;$('#gCode').value='';show('#gForm')}
+ if(t.id==='gBack'){ev.preventDefault();show('#gLogin')}
 });
 boot();
 })();
