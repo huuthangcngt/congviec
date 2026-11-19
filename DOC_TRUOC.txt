@@ -1,7 +1,0 @@
-THƯ MỤC PHÁT HÀNH – HỒ SƠ GIAO KHOÁN 1.0.0.0
-
-1. Đưa TOÀN BỘ thư mục này lên địa chỉ: https://github.com/huuthangcngt/congviec.git/
-   (kiểm tra: mở https://github.com/huuthangcngt/congviec.git/taskpane.html phải thấy màn hình khóa)
-2. Cài add-in vào Excel bằng file manifest.xml (xem tab Hướng dẫn trong công cụ chủ sở hữu).
-3. core.enc.js là lõi phần mềm đã mã hóa AES-256 – an toàn để công khai.
-   config.js chỉ chứa khóa công khai. Không có khóa bí mật nào trong thư mục này.
