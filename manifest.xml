@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>a9e8e422-d28f-4215-ac8f-2470d08e171e</Id>
+  <Version>1.0.2.0</Version>
+  <ProviderName>Hữu Thăng</ProviderName>
+  <DefaultLocale>vi-VN</DefaultLocale>
+  <DisplayName DefaultValue="Hồ sơ Giao khoán"/>
+  <Description DefaultValue="Lập hợp đồng giao khoán nhân công, biên bản nghiệm thu, bảng thanh toán, thanh lý – có bản quyền, mã kích hoạt theo máy."/>
+  <IconUrl DefaultValue="https://huuthangcngt.github.io/congviec/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://huuthangcngt.github.io/congviec/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://huuthangcngt.github.io/congviec/taskpane.html"/>
+  <AppDomains>
+    <AppDomain>https://huuthangcngt.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="ExcelApi" MinVersion="1.4"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://huuthangcngt.github.io/congviec/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GK.GetStarted.Title"/>
+            <Description resid="GK.GetStarted.Desc"/>
+            <LearnMoreUrl resid="GK.Taskpane.Url"/>
+          </GetStarted>
+          <FunctionFile resid="GK.Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="GK.Group">
+                <Label resid="GK.Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="GK.Icon.16"/>
+                  <bt:Image size="32" resid="GK.Icon.32"/>
+                  <bt:Image size="80" resid="GK.Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="GK.OpenButton">
+                  <Label resid="GK.Button.Label"/>
+                  <Supertip>
+                    <Title resid="GK.Button.Label"/>
+                    <Description resid="GK.Button.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="GK.Icon.16"/>
+                    <bt:Image size="32" resid="GK.Icon.32"/>
+                    <bt:Image size="80" resid="GK.Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>GKPane</TaskpaneId>
+                    <SourceLocation resid="GK.Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="GK.Icon.16" DefaultValue="https://huuthangcngt.github.io/congviec/assets/icon-16.png"/>
+        <bt:Image id="GK.Icon.32" DefaultValue="https://huuthangcngt.github.io/congviec/assets/icon-32.png"/>
+        <bt:Image id="GK.Icon.80" DefaultValue="https://huuthangcngt.github.io/congviec/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GK.Commands.Url" DefaultValue="https://huuthangcngt.github.io/congviec/commands.html"/>
+        <bt:Url id="GK.Taskpane.Url" DefaultValue="https://huuthangcngt.github.io/congviec/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GK.GetStarted.Title" DefaultValue="Hồ sơ Giao khoán đã sẵn sàng"/>
+        <bt:String id="GK.Group.Label" DefaultValue="Giao khoán"/>
+        <bt:String id="GK.Button.Label" DefaultValue="Hồ sơ Giao khoán"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GK.GetStarted.Desc" DefaultValue="Bấm nút Hồ sơ Giao khoán trên tab Home để mở phần mềm. Lần đầu cần nhập mã kích hoạt."/>
+        <bt:String id="GK.Button.Tip" DefaultValue="Mở phần mềm lập hồ sơ giao khoán nhân công (cần mã kích hoạt)."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

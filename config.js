@@ -1,0 +1,2 @@
+/* Cấu hình công khai – chỉ chứa khóa CÔNG KHAI, an toàn để đưa lên hosting */
+window.GK_CONFIG={"v":1,"sigPub":"BBxBMV9k9t7j2cpRUPyk-sbOG6bsIMUldD_aTZKp45jb7ypYaAmuSmzItm1C5SzAUfRlhN7xfvyCy8uLYI4R4Ps","dhPub":"BNtfN7a5VlUZXTQb-JqbCTID2McaR6w0HlrrkxOEYxBIfjd7F8FM4-5nrsjHKEBIxDeEWxpY4ZaDIEofV3fnE2s","kcv":"yuECY2kq","chuSoHuu":"Hữu Thăng","lienHe":"Zalo: 0583113222","ver":"1.0.2.0","build":"2026-11-19"};
