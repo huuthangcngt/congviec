@@ -179,6 +179,70 @@ table.rzt textarea.ta{resize:vertical;min-height:34px;line-height:1.4;overflow:h
 #gate a{color:var(--acc)}
 #lic input{font:inherit;border:1px solid #cfd4dc;border-radius:7px;padding:7px 9px;width:100%}
 #lic .box{max-height:90vh;overflow:auto}
+/* ===================== RIBBON (kiểu Office) ===================== */
+body.rb-on header{height:auto;min-height:0;padding:6px 14px;background:#0f3b5c}
+body.rb-on header h1{font-size:14px}
+body.rb-on header .tb{display:none}
+body.rb-on header .proj{opacity:.85;font-size:12.5px}
+body.rb-nonav nav#nav{display:none!important}
+#rb{flex:none;background:#f3f3f3;border-bottom:1px solid #d6d9de;position:relative;z-index:20;user-select:none;font-family:"Segoe UI",system-ui,sans-serif}
+.rb-tabs{display:flex;align-items:flex-end;gap:2px;padding:4px 10px 0;height:34px}
+.rb-tab{border:0;background:none;padding:6px 12px 7px;font-size:13.5px;color:#323130;border-radius:6px 6px 0 0;position:relative;cursor:pointer}
+.rb-tab:hover{background:#e6e6e6}
+.rb-tab.on{color:#0f5c8c;font-weight:600}
+.rb-tab.on::after{content:'';position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:2px;background:#0f5c8c}
+.rb-sp{flex:1}
+.rb-user{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#505a66;padding:0 10px 7px}
+.rb-user svg{width:15px;height:15px}
+.rb-min{border:0;background:none;font-size:13px;color:#505a66;padding:4px 8px 7px;cursor:pointer;border-radius:4px}.rb-min:hover{background:#e6e6e6}
+.rb-body{display:flex;align-items:stretch;background:#fff;margin:0 8px 6px;border:1px solid #e1e3e6;border-radius:8px;padding:4px 2px 0;min-height:104px;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.rb-g{display:flex;flex-direction:column;padding:0 6px;border-right:1px solid #e1e3e6;flex:none}
+.rb-g:last-child{border-right:0}
+.rb-items{display:flex;align-items:flex-start;gap:2px;flex:1}
+.rb-gl{font-size:11.5px;color:#605e5c;text-align:center;padding:2px 0 4px;white-space:nowrap}
+.rb-col{display:flex;flex-direction:column;gap:1px;padding-top:2px}
+.rb-big,.rb-sm{border:1px solid transparent;background:none;cursor:pointer;color:#252423;border-radius:5px;font:inherit}
+.rb-big{display:flex;flex-direction:column;align-items:center;width:auto;min-width:56px;max-width:92px;padding:4px 6px 3px;font-size:12.5px;line-height:1.2;text-align:center;min-height:76px}
+.rb-big i{width:34px;height:34px;display:block;margin:2px 0 4px}
+.rb-big span{white-space:normal}
+.rb-sm{display:flex;align-items:center;gap:6px;padding:3px 8px 3px 5px;font-size:12.5px;white-space:nowrap;height:26px;text-align:left}
+.rb-sm i{width:18px;height:18px;display:block;flex:none}
+.rb-big svg,.rb-sm svg,.rb-mi i svg{width:100%;height:100%;display:block}
+.rb-big:hover,.rb-sm:hover{background:#f0f4f8;border-color:#d7e2ec}
+.rb-big.on,.rb-sm.on{background:#dfeaf4;border-color:#b6cde2}
+.rb-big.open,.rb-sm.open{background:#cfe0f0;border-color:#9fbfdc}
+.car{font-size:9px;color:#605e5c;font-weight:400}
+body.rb-mini .rb-body{display:none}
+body.rb-mini.rb-peek .rb-body{display:flex;position:absolute;left:0;right:0;top:34px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+/* menu */
+.rb-menu{position:fixed;z-index:60;background:#fff;border:1px solid #d6d9de;border-radius:8px;box-shadow:0 10px 30px rgba(16,24,40,.18);padding:6px;min-width:250px;max-width:min(560px,92vw);max-height:80vh;overflow:auto;font-family:"Segoe UI",system-ui,sans-serif}
+.rb-mi{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:6px;cursor:pointer}
+.rb-mi i{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center}
+.rb-mi>div{flex:1;min-width:0}
+.rb-mi b{display:block;font-size:13.5px;font-weight:600;color:#201f1e}
+.rb-mi span{display:block;font-size:12.5px;color:#605e5c;margin-top:1px}
+.rb-mi em{font-style:normal;color:#605e5c;font-size:18px;padding-left:12px}
+.rb-mi:hover,.rb-mi.hov{background:#eef4fa}
+.rb-mi.on b{color:#0f5c8c}
+.rb-mi.dis{opacity:.5;cursor:default}
+.rb-mi .tick{color:#0f5c8c;font-size:15px}
+.rb-msep{height:1px;background:#e5e7eb;margin:5px 6px}
+.rb-mhead{font-size:11.5px;font-weight:700;color:#605e5c;text-transform:uppercase;letter-spacing:.3px;padding:8px 10px 4px}
+/* thanh trạng thái */
+#sb{flex:none;display:flex;justify-content:space-between;gap:10px;align-items:center;height:26px;padding:0 14px;background:#f3f3f3;border-top:1px solid #d6d9de;font-size:12px;color:#505a66;overflow:hidden;white-space:nowrap}
+#sb>div{display:flex;gap:16px;align-items:center;overflow:hidden}
+#sb b{color:#252423;font-weight:600}
+#sb .e{color:var(--err);cursor:pointer}#sb .w{color:#b54708;cursor:pointer}#sb .ok{color:var(--ok);cursor:pointer}
+/* hộp thoại */
+#rbDlg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:70;padding:16px}
+#rbDlg.on{display:flex}
+#rbDlg .box{background:#fff;border-radius:12px;max-width:620px;width:100%;max-height:85vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+#rbDlg .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+#rbDlg .hd b{font-size:15px}#rbDlg .hd button{border:0;background:none;font-size:16px;cursor:pointer}
+#rbDlgB{padding:14px 18px 18px}
+#rbDlgB .msg{padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:13.5px}
+@media (max-width:760px){.rb-body{min-height:0}.rb-big{min-height:66px;min-width:50px;font-size:11.5px}.rb-big i{width:28px;height:28px}.rb-user span{display:none}#sbR span:nth-child(2){display:none}}
+@media print{#rb,#sb{display:none}}
 
 </style>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
@@ -445,7 +509,7 @@ var CFG=window.GK_CONFIG,ENC=window.GK_CORE_ENC,dev=null,FP='',LIC=null,DK=null,
 var $=function(s){return document.querySelector(s)};
 var te=new TextEncoder(),td=new TextDecoder(),sub=crypto.subtle,ITER=210000;
 function show(id){['#gBusy','#gLogin','#gSetup','#gForm'].forEach(function(x){$(x).hidden=x!==id})}
-function err(id,m){var e=$(id);e.textContent='⛔ '+m;e.hidden=!m}
+function err(id,m){var e=$(id);if(!e){if(m){console.error(m);alert('Lỗi khởi động phần mềm: '+m)}return}e.textContent='⛔ '+m;e.hidden=!m}
 function fatal(m){show('#gBusy');$('#gBusy').innerHTML='<div class="err">⛔ '+m+'</div>'}
 function fmtD(s){return s?s.split('-').reverse().join('/'):'Không thời hạn'}
 function normU(u){return String(u||'').trim().toLowerCase().replace(/[\s.\-]/g,'')}
@@ -483,8 +547,11 @@ var HOST={
  libSave:function(name,text){return GKC.encData(DK,text).then(function(e){localStorage.setItem('gk_lib_'+name,e)})},
  encryptExport:function(text){return GKC.encData(DK,text).then(function(e){return 'Ho so Giao khoan - du lieu ma hoa\n'+e+'\n'})},
  decryptImport:function(text){var t=String(text).trim();if(t.charAt(0)==='{'||t.charAt(0)==='[')return Promise.resolve(t);var m=/GKDATA1\.[\s\S]+/.exec(t);if(!m)return Promise.reject(new Error('File không đúng định dạng.'));return GKC.decData(DK,m[0])},
- showLicense:function(){var a=accGet()||{};var kv=[['Tên đăng nhập',a.user||'—'],['Người được cấp',LIC.ten||'—'],['Ghi chú',LIC.gc||'—'],['Mã máy',FP],['Số giấy phép',LIC.id],['Ngày cấp',fmtD(LIC.cap)],['Hạn dùng',fmtD(LIC.han)],['Nơi lưu dữ liệu',HOST.inExcel?'Mã hóa trong file Excel đang mở':'Mã hóa trong trình duyệt']];
-  $('#licKV').innerHTML=kv.map(function(x){return '<div>'+x[0]+'</div><div>'+String(x[1]).replace(/</g,'&lt;')+'</div>'}).join('');$('#cUser').value=a.user||'';$('#cMsg').textContent='';$('#lic').classList.add('on')}
+ info:function(){return {chuSoHuu:CFG.chuSoHuu||'',lienHe:CFG.lienHe||'',user:(accGet()||{}).user||'',fp:FP,lic:LIC||{}}},
+ logout:function(){location.reload()},
+ deactivate:function(){if(!confirm('Gỡ kích hoạt? Tài khoản đăng nhập trên máy này sẽ bị xóa, lần sau phải nhập lại mã kích hoạt.'))return;localStorage.removeItem('gk_acc');localStorage.removeItem('gk_license');location.reload()},
+ showLicense:function(pw){var a=accGet()||{};var kv=[['Tên đăng nhập',a.user||'—'],['Người được cấp',LIC.ten||'—'],['Ghi chú',LIC.gc||'—'],['Mã máy',FP],['Số giấy phép',LIC.id],['Ngày cấp',fmtD(LIC.cap)],['Hạn dùng',fmtD(LIC.han)],['Nơi lưu dữ liệu',HOST.inExcel?'Mã hóa trong file Excel đang mở':'Mã hóa trong trình duyệt']];
+  $('#licKV').innerHTML=kv.map(function(x){return '<div>'+x[0]+'</div><div>'+String(x[1]).replace(/</g,'&lt;')+'</div>'}).join('');$('#cUser').value=a.user||'';$('#cMsg').textContent='';$('#lic details').open=!!pw;$('#lic').classList.add('on');if(pw)setTimeout(function(){$('#cOld').focus()},50)}
 };
 
 async function mount(r){
@@ -494,8 +561,8 @@ async function mount(r){
  $('#gate').remove();
  document.body.insertAdjacentHTML('afterbegin',$('#appTpl').innerHTML);
  $('#licClose').onclick=function(){$('#lic').classList.remove('on')};
- $('#licOut').onclick=function(){location.reload()};
- $('#licOff').onclick=function(){if(!confirm('Gỡ kích hoạt? Tài khoản đăng nhập trên máy này sẽ bị xóa, lần sau phải nhập lại mã kích hoạt.'))return;localStorage.removeItem('gk_acc');localStorage.removeItem('gk_license');location.reload()};
+ $('#licOut').onclick=HOST.logout;
+ $('#licOff').onclick=HOST.deactivate;
  $('#cGo').onclick=async function(){var m=$('#cMsg');m.style.color='var(--err)';try{var a=accGet(),code=await accOpen(a.user,$('#cOld').value),nu=$('#cUser').value.trim()||a.user,np=$('#cNew').value,p=np||$('#cOld').value;
    if(np){var e=checkPass(np,$('#cNew2').value);if(e)throw new Error(e)}if(!nu)throw new Error('Tên đăng nhập không được để trống.');
    await accSave(nu,p,code);['#cOld','#cNew','#cNew2'].forEach(function(x){$(x).value=''});HOST.showLicense();m.style.color='var(--ok)';m.textContent='✓ Đã lưu. Lần sau đăng nhập bằng '+nu}catch(e){m.textContent='⛔ '+e.message}};
@@ -523,7 +590,7 @@ document.addEventListener('click',async function(ev){var t=ev.target;
  if(t.id==='gGo'){err('#gErr','');t.disabled=true;t.textContent='Đang kiểm tra…';var code=$('#gCode').value.replace(/\s+/g,'');
   try{var r=await GKC.verify(code,CFG,dev);toSetup(code,r)}catch(e){err('#gErr',e.gk?e.message:'Lỗi: '+e.message)}t.disabled=false;t.textContent='🔓 Kích hoạt'}
  if(t.id==='sGo'){err('#sErr','');var u=$('#sUser').value.trim(),p=$('#sPass').value,m=checkPass(p,$('#sPass2').value);if(!u)m='Nhập tên đăng nhập.';if(m)return err('#sErr',m);
-  t.disabled=true;try{await accSave(u,p,PENDING.code);await mount(PENDING.r)}catch(e){err('#sErr',e.message);t.disabled=false}}
+  t.disabled=true;try{await accSave(u,p,PENDING.code);await mount(PENDING.r)}catch(e){console.error(e);err('#sErr',e.message);t.disabled=false}}
  if(t.id==='lGo'){err('#lErr','');var w=lockLeft();if(w)return err('#lErr','Nhập sai nhiều lần – thử lại sau '+w+' giây.');t.disabled=true;t.textContent='Đang kiểm tra…';
   try{var code2=await accOpen($('#lUser').value,$('#lPass').value);var r2=await GKC.verify(code2,CFG,dev);await mount(r2)}
   catch(e){if(/Sai tên/.test(e.message))failOnce();err('#lErr',e.message);t.disabled=false;t.textContent='🔓 Đăng nhập';$('#lPass').select()}}
