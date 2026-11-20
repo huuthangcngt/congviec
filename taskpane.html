@@ -243,6 +243,32 @@ body.rb-mini.rb-peek .rb-body{display:flex;position:absolute;left:0;right:0;top:
 #rbDlgB .msg{padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:13.5px}
 @media (max-width:760px){.rb-body{min-height:0}.rb-big{min-height:66px;min-width:50px;font-size:11.5px}.rb-big i{width:28px;height:28px}.rb-user span{display:none}#sbR span:nth-child(2){display:none}}
 @media print{#rb,#sb{display:none}}
+/* ===== Ảnh CCCD ===== */
+.ccc{display:flex;gap:6px}
+.ccs{position:relative;width:76px;height:48px;border:1.5px dashed #b8c2cf;border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#f8fafc;overflow:hidden;flex:none}
+.ccs span{font-size:11px;color:#667085;white-space:nowrap}
+.ccs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.ccs.has{border-style:solid;border-color:#9fbfdc}.ccs.has img{display:block}.ccs.has span{display:none}
+.ccs:hover{border-color:var(--acc);box-shadow:0 0 0 2px rgba(15,92,140,.15)}
+.cc-tools{margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+.ccdlg{position:fixed;inset:0;background:rgba(16,24,40,.55);display:none;align-items:center;justify-content:center;z-index:80;padding:14px}
+.ccdlg.on{display:flex}
+.ccdlg .box{background:#fff;border-radius:12px;max-width:940px;width:100%;max-height:94vh;overflow:auto;padding:14px 18px 16px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.ccdlg .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.ccdlg .hd b{font-size:15px}.ccdlg .hd button{border:0;background:none;font-size:17px;cursor:pointer}
+.ccStage{position:relative;background:#1f2933;border-radius:8px;display:flex;align-items:center;justify-content:center;min-height:240px;overflow:hidden;user-select:none}
+#ccIm{max-width:100%;max-height:62vh;display:block}
+#ccBox{position:absolute;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.55);cursor:move;touch-action:none;border-radius:6px}
+#ccBox i{position:absolute;width:16px;height:16px;background:#fff;border:2px solid var(--acc);border-radius:50%}
+#ccBox i[data-h=tl]{left:-9px;top:-9px;cursor:nwse-resize}#ccBox i[data-h=br]{right:-9px;bottom:-9px;cursor:nwse-resize}#ccBox i[data-h=tr]{right:-9px;top:-9px;cursor:nesw-resize}#ccBox i[data-h=bl]{left:-9px;bottom:-9px;cursor:nesw-resize}
+#ccBox em{position:absolute;left:6px;top:4px;color:#fff;font:600 11px/1 Arial;font-style:normal;text-shadow:0 1px 2px #000;pointer-events:none}
+.nclist{max-height:56vh;overflow:auto;border:1px solid var(--line);border-radius:8px;margin-top:10px}
+.ncrow{display:grid;grid-template-columns:22px 1fr;column-gap:8px;padding:8px 12px;border-bottom:1px solid #f0f2f5;cursor:pointer;align-items:center}
+.ncrow b{font-size:13.5px}.ncrow span{grid-column:2;font-size:12.5px;color:var(--muted)}.ncrow .ad{font-size:12px}
+.ncrow em{grid-column:2;font-size:11.5px;color:var(--ok);font-style:normal}
+.ncrow input{grid-row:span 3}.ncrow.in{opacity:.6}.ncrow:hover{background:#f5f8fb}
+.lawrow{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;cursor:pointer}
+.lawrow .lt{font-size:12.5px;color:var(--muted);margin-bottom:4px}.lawrow .lo code{background:#fdecea;color:#912018;text-decoration:line-through}.lawrow .ln code{background:#ecfdf3;color:#05603a}
+.lawrow code{white-space:normal;font-size:12.5px;padding:1px 4px;border-radius:4px;line-height:1.6}
 
 </style>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
@@ -532,6 +558,9 @@ function failOnce(){var l=JSON.parse(localStorage.getItem('gk_lock')||'{"n":0,"t
 
 /* ---- Lưu trữ dữ liệu hồ sơ: mã hóa, nằm trong chính file Excel (document settings) ---- */
 var SKEY='gk_hoso_enc';
+var ANH_DB=null;
+function anhOpen(){if(ANH_DB)return Promise.resolve(ANH_DB);return new Promise(function(res,rej){var r=indexedDB.open('gk-anh',1);r.onupgradeneeded=function(){r.result.createObjectStore('a')};r.onsuccess=function(){ANH_DB=r.result;res(ANH_DB)};r.onerror=function(){rej(r.error)}})}
+function anhTx(mode,fn){return anhOpen().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('a',mode),q=fn(tx.objectStore('a'));tx.oncomplete=function(){res(q&&'result' in q?q.result:undefined)};tx.onerror=function(){rej(tx.error)};tx.onabort=function(){rej(tx.error||new Error('Lưu ảnh thất bại (bộ nhớ đầy?)'))}})})}
 var HOST={
  inExcel:false,
  loadData:function(){var raw=null;
@@ -547,6 +576,11 @@ var HOST={
  libSave:function(name,text){return GKC.encData(DK,text).then(function(e){localStorage.setItem('gk_lib_'+name,e)})},
  encryptExport:function(text){return GKC.encData(DK,text).then(function(e){return 'Ho so Giao khoan - du lieu ma hoa\n'+e+'\n'})},
  decryptImport:function(text){var t=String(text).trim();if(t.charAt(0)==='{'||t.charAt(0)==='[')return Promise.resolve(t);var m=/GKDATA1\.[\s\S]+/.exec(t);if(!m)return Promise.reject(new Error('File không đúng định dạng.'));return GKC.decData(DK,m[0])},
+ /* kho ảnh (CCCD…) – IndexedDB trên máy, mỗi ảnh mã hóa AES-GCM bằng khóa dữ liệu */
+ imgPut:function(k,dataUrl){return GKC.encData(DK,dataUrl).then(function(e){return anhTx('readwrite',function(st){st.put(e,k)})})},
+ imgGet:function(k){return anhTx('readonly',function(st){return st.get(k)}).then(function(e){return e?GKC.decData(DK,e):null})},
+ imgDel:function(k){return anhTx('readwrite',function(st){st.delete(k)})},
+ imgKeys:function(){return anhTx('readonly',function(st){return st.getAllKeys()})},
  info:function(){return {chuSoHuu:CFG.chuSoHuu||'',lienHe:CFG.lienHe||'',user:(accGet()||{}).user||'',fp:FP,lic:LIC||{}}},
  logout:function(){location.reload()},
  deactivate:function(){if(!confirm('Gỡ kích hoạt? Tài khoản đăng nhập trên máy này sẽ bị xóa, lần sau phải nhập lại mã kích hoạt.'))return;localStorage.removeItem('gk_acc');localStorage.removeItem('gk_license');location.reload()},

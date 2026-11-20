@@ -1,0 +1,21 @@
+{
+ "capNhat": "2026-11-20",
+ "ghiChu": "Danh sách thay thế văn bản pháp luật hết hiệu lực. Sửa file này trên GitHub khi có luật/nghị định mới – mọi máy bấm nút Cập nhật sẽ nhận ngay. 'tim' là biểu thức tìm (regex), 'thay' là nội dung mới.",
+ "quyTac": [
+  {"ten": "Luật Xây dựng 2014 (sửa đổi 2020)", "tim": "Luật Xây dựng(?: số)? 50/2014/QH13(?:,? (?:đã )?được sửa đổi, bổ sung(?: một số điều)?(?: theo| bởi| tại)? Luật(?: số)? 62/2020/QH14)?", "thay": "Luật Xây dựng số 135/2025/QH15", "hieuLuc": "2026-07-01"},
+  {"ten": "Luật sửa đổi Luật Xây dựng 62/2020", "tim": "Luật(?: số)? 62/2020/QH14[^;\\n]*", "thay": "Luật Xây dựng số 135/2025/QH15", "hieuLuc": "2026-07-01"},
+  {"ten": "Nghị định 37/2015 về hợp đồng xây dựng", "tim": "Nghị định(?: số)? 37/2015/NĐ-CP[^;\\n]*", "thay": "Nghị định số 210/2026/NĐ-CP ngày 15/6/2026 của Chính phủ quy định chi tiết và hướng dẫn thi hành một số điều của Luật Xây dựng về hợp đồng xây dựng", "hieuLuc": "2026-07-01"},
+  {"ten": "Nghị định 50/2021 sửa đổi NĐ 37/2015", "tim": "Nghị định(?: số)? 50/2021/NĐ-CP[^;\\n]*", "thay": "Nghị định số 210/2026/NĐ-CP ngày 15/6/2026 của Chính phủ quy định chi tiết và hướng dẫn thi hành một số điều của Luật Xây dựng về hợp đồng xây dựng", "hieuLuc": "2026-07-01"},
+  {"ten": "Nghị định 15/2021, 175/2024 về quản lý dự án/hoạt động xây dựng", "tim": "Nghị định(?: số)? (?:15/2021|175/2024)/NĐ-CP[^;\\n]*", "thay": "Nghị định số 217/2026/NĐ-CP ngày 19/6/2026 của Chính phủ quy định chi tiết một số điều của Luật Xây dựng về quản lý hoạt động xây dựng", "hieuLuc": "2026-07-01"},
+  {"ten": "Nghị định 06/2021 về quản lý chất lượng", "tim": "Nghị định(?: số)? 06/2021/NĐ-CP[^;\\n]*", "thay": "Nghị định số 207/2026/NĐ-CP của Chính phủ về quản lý chất lượng, thi công xây dựng và bảo trì công trình xây dựng", "hieuLuc": "2026-07-01"},
+  {"ten": "Nghị định 10/2021, 68/2019, 32/2015 về chi phí đầu tư xây dựng", "tim": "Nghị định(?: số)? (?:10/2021|68/2019|32/2015)/NĐ-CP[^;\\n]*", "thay": "Nghị định số 206/2026/NĐ-CP ngày 15/6/2026 của Chính phủ quy định chi tiết về quản lý chi phí đầu tư xây dựng", "hieuLuc": "2026-07-01"},
+  {"ten": "Bộ luật Dân sự 2005", "tim": "Bộ luật Dân sự(?: số)? 33/2005/QH11", "thay": "Bộ luật Dân sự số 91/2015/QH13", "hieuLuc": "2017-01-01"},
+  {"ten": "Bộ luật Lao động 2012", "tim": "Bộ luật Lao động(?: số)? 10/2012/QH13", "thay": "Bộ luật Lao động số 45/2019/QH14", "hieuLuc": "2021-01-01"},
+  {"ten": "Luật Đấu thầu 2013", "tim": "Luật Đấu thầu(?: số)? 43/2013/QH13", "thay": "Luật Đấu thầu số 22/2023/QH15", "hieuLuc": "2024-01-01"},
+  {"ten": "Luật Doanh nghiệp 2014", "tim": "Luật Doanh nghiệp(?: số)? 68/2014/QH13", "thay": "Luật Doanh nghiệp số 59/2020/QH14", "hieuLuc": "2021-01-01"}
+ ],
+ "goiY": [
+  {"ten": "Nghị định hướng dẫn về hợp đồng xây dựng", "coRoi": "210/2026/NĐ-CP", "sauDong": "Luật Xây dựng", "dong": "- Căn cứ Nghị định số 210/2026/NĐ-CP ngày 15/6/2026 của Chính phủ quy định chi tiết và hướng dẫn thi hành một số điều của Luật Xây dựng về hợp đồng xây dựng;"},
+  {"ten": "Bộ luật Lao động (tổ đội tự chịu trách nhiệm về người lao động)", "coRoi": "Bộ luật Lao động", "sauDong": "Bộ luật Dân sự", "dong": "- Căn cứ Bộ luật Lao động số 45/2019/QH14;"}
+ ]
+}
